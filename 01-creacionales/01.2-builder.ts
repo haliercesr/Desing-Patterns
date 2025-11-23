@@ -50,24 +50,29 @@ class QueryBuilder {
   }
 
   select(...fields: string[]): QueryBuilder {
-    throw new Error('Method not implemented.');
+    fields.length > 0 ? this.fields = fields : this.fields = ["*"];
+    return this;
   }
 
   where(condition: string): QueryBuilder {
-    throw new Error('Method not implemented.');
+    this.conditions.length > 0 ? this.conditions.push("AND " + condition) : this.conditions.push(condition)
+    return this;
   }
 
   orderBy(field: string, direction: 'ASC' | 'DESC' = 'ASC'): QueryBuilder {
-    throw new Error('Method not implemented.');
+    this.orderFields.push("ORDER BY " + field + " " + direction);
+    return this;
   }
 
   limit(count: number): QueryBuilder {
-    throw new Error('Method not implemented.');
+    this.limitCount = count;
+    return this;
   }
 
   execute(): string {
     // Select id, name, email from users where age > 18 and country = 'Cri' order by name ASC limit 10;
-    throw new Error('Method not implemented.');
+    let query = "SELECT " + this.fields.join(",") + "  FROM " + this.table + " WHERE " + this.conditions.join(" ") + " " + this.orderFields.join(" ") + " " + (this.limitCount ? "LIMIT " + this.limitCount : "");
+    return query;
   }
 }
 
